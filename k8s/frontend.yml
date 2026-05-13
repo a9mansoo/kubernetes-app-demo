@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+  namespace: prod
+  labels:
+    app: frontend-react
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: frontend-react-pod
+  template:
+    metadata:
+      labels:
+        app: frontend-react-pod
+    spec:
+      containers:
+        - name: frontend-react
+          image: frontend-react
+          imagePullPolicy: IfNotPresent
+      restartPolicy: Always
