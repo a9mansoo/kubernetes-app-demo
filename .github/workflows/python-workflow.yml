@@ -23,12 +23,11 @@ jobs:
             - name: Show files
               run: |
                 ls -al ./
-                cd backend
             
             - name: Setup Python
               uses: actions/setup-python@v6
               with:
-                 python-version-file: "pyproject.toml"
+                 python-version-file: "backend/pyproject.toml"
             
             - name: Install uv
               run: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b
@@ -46,7 +45,6 @@ jobs:
             - name: Show files
               run: |
                 ls -al ./
-                cd backend
             
             - name: Setup Python
               uses: actions/setup-python@v6
