@@ -35,10 +35,36 @@ jobs:
             - name: Run Black
               working-directory: backend
               run: uv tool run black --check .
+    
+    lint:
+        runs-on: "ubuntu-latest"
+        steps:
+            - name: Checkout backend
+              uses: actions/checkout@v6
+              with:
+                show-progress: true
+                sparse-checkout: backend
+            
+            - name: Show files
+              run: |
+                ls -al ./
+            
+            - name: Setup Python
+              uses: actions/setup-python@v6
+              with:
+                 python-version-file: "backend/pyproject.toml"
+            
+            - name: Install uv
+              uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b
+            
+            - name: Run ruff
+              working-directory: backend
+              run: uv tool run ruff .
             
     
     test:
         runs-on: "ubuntu-latest"
+        needs: [lint, format]
         steps:
             - name: Checkout backend
               uses: actions/checkout@v6
