@@ -59,7 +59,7 @@ jobs:
             
             - name: Run ruff
               working-directory: backend
-              run: uv tool run ruff .
+              run: uv tool run ruff check .
             
     
     test:
