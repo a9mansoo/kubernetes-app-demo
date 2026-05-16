@@ -21,7 +21,9 @@ jobs:
                 sparse-checkout: backend
             
             - name: Show files
-              run: ls -al ./
+              run: 
+                ls -al ./
+                cd backend
             
             - name: Setup Python
               uses: actions/setup-python@v6
@@ -42,7 +44,9 @@ jobs:
                 sparse-checkout: backend
             
             - name: Show files
-              run: ls -al ./
+              run: 
+                ls -al ./
+                cd backend
             
             - name: Setup Python
               uses: actions/setup-python@v6
