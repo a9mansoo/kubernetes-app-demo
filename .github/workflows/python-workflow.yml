@@ -30,7 +30,7 @@ jobs:
                  python-version-file: "backend/pyproject.toml"
             
             - name: Install uv
-              run: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b
+              uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b
             
     
     test:
@@ -52,4 +52,4 @@ jobs:
                 python-version-file: "pyproject.toml"
          
             - name: Install uv
-              run: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b
+              uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b
