@@ -34,7 +34,7 @@ jobs:
             
             - name: Run Black
               working-directory: backend
-              run: uv tool black .
+              run: uv tool run black .
             
     
     test:
