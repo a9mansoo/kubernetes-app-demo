@@ -1,10 +1,12 @@
 import uvicorn
-from app import create_app
+import os
+from app import create_app, generate_app_config
 
 
 
 def main():
-    app = create_app()
+    app_config = generate_app_config(root_path=os.getenv("ROOT_PATH"))
+    app = create_app(app_config)
     uvicorn.run(app, host="0.0.0.0", port=8000)
     
 
