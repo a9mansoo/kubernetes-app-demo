@@ -1,0 +1,53 @@
+name: Python Workflow
+
+on:
+    push:
+        branches:
+            - main
+
+    pull_request:
+        types: [opened, reopened]
+        branches:
+            - master
+
+jobs:
+    format:
+        runs-on: "ubuntu-latest"
+        steps:
+            - name: Checkout backend
+              uses: actions/checkout@v6
+              with:
+                show-progress: true
+                sparse-checkout: backend
+            
+            - name: Show files
+              run: ls -al ./
+            
+            - name: Setup Python
+              uses: actions/setup-python@v6
+              with:
+                 python-version-file: "pyproject.toml"
+            
+            - name: Install uv
+              run: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b
+            
+    
+    test:
+        runs-on: "ubuntu-latest"
+        steps:
+            - name: Checkout backend
+              uses: actions/checkout@v6
+              with:
+                show-progress: true
+                sparse-checkout: backend
+            
+            - name: Show files
+              run: ls -al ./
+            
+            - name: Setup Python
+              uses: actions/setup-python@v6
+              with:
+                python-version-file: "pyproject.toml"
+         
+            - name: Install uv
+              run: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b
