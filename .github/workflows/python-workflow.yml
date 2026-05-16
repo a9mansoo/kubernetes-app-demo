@@ -32,6 +32,10 @@ jobs:
             - name: Install uv
               uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b
             
+            - name: Run Black
+              working-directory: backend
+              run: uv tool black .
+            
     
     test:
         runs-on: "ubuntu-latest"
