@@ -9,7 +9,7 @@ def add_middleware(app: FastAPI):
         CORSMiddleware,
         allow_origins=["http://localhost:5173"],
         allow_methods=["*"],
-        allow_headers=["*"]
+        allow_headers=["*"],
     )
     return app
 
@@ -21,10 +21,17 @@ def add_api_routes(app):
 
 
 def create_app(app_config):
-    app = FastAPI(title="FastAPI Backend Application", description="Backend application", summary="API endpoints", version="1.0.0", root_path=app_config.root_path)
+    app = FastAPI(
+        title="FastAPI Backend Application",
+        description="Backend application",
+        summary="API endpoints",
+        version="1.0.0",
+        root_path=app_config.root_path,
+    )
     app = add_api_routes(app)
     app = add_middleware(app)
     return app
+
 
 def generate_app_config(**kwargs):
     config = Config(**kwargs)

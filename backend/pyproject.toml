@@ -1,10 +1,20 @@
 [project]
 name = "backend"
-version = "0.1.0"
-description = "Add your description here"
+version = "1.0.0"
+description = "FastAPI backend"
 readme = "README.md"
+authors = [
+    {"name" = "Ayaan Pal"}
+]
 requires-python = ">=3.10"
 dependencies = [
     "fastapi>=0.136.1",
     "uvicorn>=0.46.0",
+]
+
+[project.optional-dependencies]
+test = [
+    "pytest",
+    "httpx",
+    "pytest-cov"
 ]
