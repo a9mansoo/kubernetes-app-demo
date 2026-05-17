@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+
+metadata:
+  name: frontend-configmap
+  namespace: prod
+
+data:
+  API_URL: "http://backend-service"
