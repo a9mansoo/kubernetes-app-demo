@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from .routes import health_api, user_api
+from .routes import health_api, user_api, info_api
 from .config import Config
 
 
@@ -17,6 +17,7 @@ def add_middleware(app: FastAPI):
 def add_api_routes(app):
     app.include_router(health_api, prefix="/hlth")
     app.include_router(user_api, prefix="/user")
+    app.include_router(info_api, prefix="/info")
     return app
 
 
@@ -25,7 +26,7 @@ def create_app(app_config):
         title="FastAPI Backend Application",
         description="Backend application",
         summary="API endpoints",
-        version="1.0.0",
+        version=app_config.app_version,
         root_path=app_config.root_path,
     )
     app = add_api_routes(app)
