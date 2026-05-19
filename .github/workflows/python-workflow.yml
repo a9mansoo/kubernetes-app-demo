@@ -8,7 +8,7 @@ on:
         #   - backend/*
 
     pull_request:
-        types: [opened, reopened]
+        types: [opened, reopened, synchronize]
         branches:
             - master
         paths:

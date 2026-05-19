@@ -2,6 +2,8 @@ name: Build Project Images
 
 on:
     push:
+        branches:
+            - master
 
 jobs:
     build_backend:
