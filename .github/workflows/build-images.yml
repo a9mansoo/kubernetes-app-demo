@@ -24,10 +24,6 @@ on:
 jobs:
     
     build_and_push:
-        permissions:
-          contents: read
-          packages: write
-
         runs-on: ubuntu-latest
         steps:
             - name: Checkout repo
