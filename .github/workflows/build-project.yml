@@ -5,7 +5,7 @@ on:
 
 jobs:
     build_backend:
-        uses: a9mansoo/kubernetes-deployment/.github/workflows/build-images.yml@main
+        uses: ./.github/workflows/build-images.yml
         with:
             BASE_IMAGE_NAME: "ghcr.io/${{ github.repository }}/fastapi-app"
         
