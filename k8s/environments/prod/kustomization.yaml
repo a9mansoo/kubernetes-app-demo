@@ -5,3 +5,10 @@ resources:
 
 
 namespace: prod
+
+images:
+  - name: fastapi-app
+    newTag: "v1.0.0"
+  
+  - name: frontend-react
+    newTag: "v1.0.0"

@@ -5,3 +5,10 @@ resources:
   - ../../app
 
 namespace: dev
+
+
+patches:
+  - path: config-patch.yaml
+    target:
+      kind: ConfigMap
+      name: backend-configmap
