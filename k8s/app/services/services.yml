@@ -3,6 +3,10 @@ kind: Service
 metadata:
   name: frontend-service
   namespace: prod
+  labels:
+    component: frontend
+    type: blue
+  
 spec:
   selector:
     app: frontend-react-pod
@@ -17,7 +21,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: backend-api-clusterip
+  name: backend-service
+  namespace: prod
+  labels:
+    component: backend-service
 spec:
   selector:
     app: fastapi-pod
