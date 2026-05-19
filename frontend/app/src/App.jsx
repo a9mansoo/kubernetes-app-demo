@@ -15,6 +15,7 @@ import {
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder"
 import ChatBubbleOutlineOutlinedIcon from '@mui/icons-material/ChatBubbleOutlineOutlined'
 import SendIcon from "@mui/icons-material/Send"
+import Skeleton from '@mui/material/Skeleton';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -23,9 +24,11 @@ function App() {
 
     const loadUser = async () => {
     try {
-      let response = (await fetch(`${API_URL}/hlth/ok`));
-      let resp_json = await response.json()
-      setUser({user: resp_json?.user, img: AvatarPic});
+      let response = (await fetch(`${API_URL}/user/1`));
+      let resp_json = await response.json();
+      if (resp_json?.user) {
+        setUser({user: resp_json.user, img: AvatarPic});
+      }
     } catch(err) {
       console.log(err);
     }
@@ -57,15 +60,15 @@ function App() {
             </Avatar>
           }
           title={user?.user || "loading..."}
-          subheader="k8s cluster"
+          subheader={user? "k8s cluster" : "loading..."}
         />
 
-        <CardMedia
+        { user? <CardMedia
           component="img"
           image={Img}
           alt="test-img"
-        />
-
+        /> : <Skeleton variant="rectangular" height={300}/>}
+        
         <Stack
           direction="row"
           spacing={1}
