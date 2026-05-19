@@ -18,15 +18,16 @@ on:
                 type: string
                 description: The path to the dockerfile to build, assume it is starting from root dir
                 required: true
-        secrets:
-          DOCKER_REGISTRY_TOKEN:
-            required: true
-            description: Token for logging into the docker registry
 
 
 
 jobs:
+    
     build_and_push:
+        permissions:
+          contents: read
+          packages: write
+
         runs-on: ubuntu-latest
         steps:
             - name: Checkout repo
@@ -56,7 +57,7 @@ jobs:
               with:
                 registry: ghcr.io
                 username: ${{ github.actor }}
-                password: ${{ secrets.DOCKER_REGISTRY_TOKEN }}
+                password: ${{ secrets.GITHUB_TOKEN }}
             
             - name: Build Image
               uses: docker/build-push-action@v7
