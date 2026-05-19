@@ -5,6 +5,7 @@ metadata:
   namespace: prod
   labels:
     app: fastapi-backend
+    component: backend
 spec:
   replicas: 3
   selector:
@@ -18,9 +19,16 @@ spec:
       containers:
         - name: backend-app
           image: fastapi-app
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
           envFrom:
             - configMapRef:
-                - name: backend-configmap
+                name: backend-configmap
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8000

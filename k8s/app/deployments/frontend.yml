@@ -19,4 +19,14 @@ spec:
         - name: frontend-react
           image: frontend-react
           imagePullPolicy: IfNotPresent
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+          envFrom:
+            - configMapRef:
+                name: frontend-configmap
       restartPolicy: Always
