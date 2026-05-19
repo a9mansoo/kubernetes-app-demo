@@ -4,11 +4,15 @@ on:
     push:
         branches:
             - master
+        # paths:
+        #   - backend/*
 
     pull_request:
         types: [opened, reopened]
         branches:
             - master
+        paths:
+          - backend/*
 
 jobs:
     format:
@@ -59,7 +63,7 @@ jobs:
             
             - name: Run ruff
               working-directory: backend
-              run: uv tool run ruff check .
+              run: uv tool run ruff check --output-format=github .
             
     
     test:
