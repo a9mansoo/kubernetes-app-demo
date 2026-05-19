@@ -8,4 +8,8 @@ jobs:
         uses: ./.github/workflows/build-images.yml
         with:
             BASE_IMAGE_NAME: "ghcr.io/${{ github.repository }}/fastapi-app"
-        
+    
+    build_frontend:
+        uses: ./.github/workflows/build-images.yml
+        with:
+            BASE_IMAGE_NAME: "ghcr.io/${{ github.repository }}/frontend-react"

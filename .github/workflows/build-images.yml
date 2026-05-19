@@ -25,6 +25,7 @@ jobs:
                   ${{ inputs.BASE_IMAGE_NAME }}
                 tags: |
                   type=ref,event=pr
+                  type=ref,event=branch
             
             - name: Output Metadata
               run: |
