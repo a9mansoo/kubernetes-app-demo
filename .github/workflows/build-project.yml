@@ -1,0 +1,11 @@
+name: Build Project Images
+
+on:
+    push:
+
+jobs:
+    build_backend:
+        uses: a9mansoo/kubernetes-deployment/.github/workflows/build-images.yml@main
+        with:
+            BASE_IMAGE_NAME: "ghcr.io/${{ github.repository }}/fastapi-app"
+        

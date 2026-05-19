@@ -1,0 +1,32 @@
+name: Build Docker Images Reusable Workflow
+
+
+on:
+    workflow_call:
+        inputs:
+            BASE_IMAGE_NAME:
+                type: string
+                description: An Image Name that will be used while creating the image
+                required: true
+
+
+jobs:
+    build_and_push:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout repo
+              uses: actions/checkout@v6
+            
+            - name: Read Metadata
+              uses: docker/metadata-action@v6
+              id: image-metadata
+              with:
+                images: |
+                  ${{ inputs.BASE_IMAGE_NAME }}
+                tags: |
+                  type=ref,event=pr
+            
+            - name: Output Metadata
+              run: |
+                echo "${{ steps.image-metadata.outputs.tag-names }}"
+                echo "${{ steps.image-metadata.outputs.tags }}"
