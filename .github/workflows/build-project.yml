@@ -8,8 +8,12 @@ jobs:
         uses: ./.github/workflows/build-images.yml
         with:
             BASE_IMAGE_NAME: "ghcr.io/${{ github.repository }}/fastapi-app"
+            BUILD_CONTEXT: "."
+            IMAGE_PATH: "docker/backend.dockerfile"
     
     build_frontend:
         uses: ./.github/workflows/build-images.yml
         with:
             BASE_IMAGE_NAME: "ghcr.io/${{ github.repository }}/frontend-react"
+            BUILD_CONTEXT: "."
+            IMAGE_PATH: "docker/frontend.dockerfile"

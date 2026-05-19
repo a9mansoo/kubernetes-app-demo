@@ -8,6 +8,17 @@ on:
                 type: string
                 description: An Image Name that will be used while creating the image
                 required: true
+            
+            BUILD_CONTEXT:
+                type: string
+                description: The build context to use when building the image
+                required: true
+            
+            IMAGE_PATH:
+                type: string
+                description: The path to the dockerfile to build, assume it is starting from root dir
+                required: true
+
 
 
 jobs:
@@ -29,5 +40,12 @@ jobs:
             
             - name: Output Metadata
               run: |
-                echo "${{ steps.image-metadata.outputs.tag-names }}"
                 echo "${{ steps.image-metadata.outputs.tags }}"
+            
+            - name: Build Image
+              uses: docker/build-push-action@v7
+              with:
+                context: ${{ inputs.BUILD_CONTEXT }}
+                push: false
+                file: ${{ inputs.IMAGE_PATH }}
+                tags: ${{ steps.image-metadata.outputs.tags }}
