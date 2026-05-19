@@ -7,6 +7,11 @@ on:
     
     pull_request:
         types: [opened, reopened, synchronize]
+    
+    release:
+        types: [published]
+
+
 
 jobs:
     build_backend:
@@ -15,6 +20,8 @@ jobs:
             BASE_IMAGE_NAME: "ghcr.io/${{ github.repository }}/fastapi-app"
             BUILD_CONTEXT: "."
             IMAGE_PATH: "docker/backend.dockerfile"
+        secrets:
+            inherit
     
     build_frontend:
         uses: ./.github/workflows/build-images.yml
@@ -22,3 +29,5 @@ jobs:
             BASE_IMAGE_NAME: "ghcr.io/${{ github.repository }}/frontend-react"
             BUILD_CONTEXT: "."
             IMAGE_PATH: "docker/frontend.dockerfile"
+        secrets:
+            inherit
