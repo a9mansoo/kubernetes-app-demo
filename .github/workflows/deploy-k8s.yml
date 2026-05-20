@@ -90,14 +90,20 @@ jobs:
                   let rolloutStatus = "${{ steps.deployment-status.outcome }}"
                   let serviceEndpointStatus = "${{steps.frontend-service.outcome }}"
                   let smokeTestStatus = "${{ steps.smoke-test.outcome }}"
-                  let uiArtifactUrl = "${{ steps.artifact-upload.outcome }}" === 'success' ? "${{ steps.artifact-upload.artifact-url }}": 'NO URL'
+                  let uiArtifactUrl = "${{ steps.artifact-upload.outcome }}" === 'success' ? "${{ steps.artifact-upload.artifact-url }}" : 'NO_URL'
 
                   let overallStatus = (rolloutStatus === 'success' && smokeTestStatus === 'success') ? '✅ PASSED' : '❌ FAILED'
-                  
-                  let summary = core.summary.addHeading(`Deployment Status: ${overallStatus}`).addBreak()
-                  .addRaw(`Rollout Status: ${rolloutStatus}`).addBreak()
-                  .addRaw(`Service Status: ${serviceEndpointStatus}`).addBreak()
-                  .addRaw(`Smoke Test: ${smokeTestStatus}`).addBreak()
+                  const successEmoji = '✅'
+                  const failureEmoji = '❌'
+                  let summary = core.summary.addHeading(`🚀 Deployment Status: ${overallStatus}`).addBreak()
+                  .addRaw(`Generated: ${new Date().toISOString()}`)
+                  .addBreak()
+                  .addBreak()
+                  .addRaw(`| Validation Check | Result |
+                  |---|---|
+                  | Kubernetes Rollout | ${rolloutStatus === 'success' ? successEmoji : failureEmoji} ${rolloutStatus} |
+                  | Service Endpoint | ${serviceEndpointStatus === 'success' ? successEmoji : failureEmoji} ${serviceEndpointStatus} |
+                  | Smoke Test | ${smokeTestStatus === 'success' ? successEmoji : failureEmoji} ${smokeTestStatus} |`).addBreak()
 
                   if (uiArtifactUrl !== "NO_URL") {
                   summary.addLink("UI Screenshot", uiArtifactUrl)
