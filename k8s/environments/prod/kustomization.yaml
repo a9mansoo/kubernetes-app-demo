@@ -9,8 +9,8 @@ namespace: prod
 images:
   - name: fastapi-app
     newName: ghcr.io/a9mansoo/kubernetes-deployment/fastapi-app
-    newTag: "v2.0.0"
+    newTag: "2.0.0"
   
   - name: frontend-react
     newName: ghcr.io/a9mansoo/kubernetes-deployment/frontend-react
-    newTag: "v2.0.0"
+    newTag: "2.0.0"
