@@ -3,11 +3,18 @@ name: Deploy Application
 
 on:
     workflow_dispatch:
+      inputs:
+        environment:
+          type: choice
+          options:
+            - development
+            - production
 
 
 jobs:
     setup_and_run_app:
         runs-on: ubuntu-latest
+        environment: ${{ inputs.environment }}
         steps:
             - name: Checkout k8s
               uses: actions/checkout@v4
