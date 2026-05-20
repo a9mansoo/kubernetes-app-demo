@@ -87,10 +87,10 @@ jobs:
               uses: actions/github-script@v8
               with:
                 script: |
-                  let rolloutStatus = ${{ steps.deployment-status.outcome }}
-                  let serviceEndpointStatus = ${{steps.frontend-service.outcome }}
-                  let smokeTestStatus = ${{ steps.smoke-test.outcome }}
-                  let uiArtifactUrl = ${{ steps.artifact-upload.outcome == 'success' && steps.artifact-upload.artifact-url || 'NO URL'}}
+                  let rolloutStatus = "${{ steps.deployment-status.outcome }}"
+                  let serviceEndpointStatus = "${{steps.frontend-service.outcome }}"
+                  let smokeTestStatus = "${{ steps.smoke-test.outcome }}"
+                  let uiArtifactUrl = "${{ steps.artifact-upload.outcome }}" === 'success' ? "${{ steps.artifact-upload.artifact-url }}": 'NO URL'
 
                   let overallStatus = (rolloutStatus === 'success' && smokeTestStatus === 'success') ? '✅ PASSED' : '❌ FAILED'
                   
