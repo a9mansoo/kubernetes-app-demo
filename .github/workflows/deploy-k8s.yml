@@ -89,7 +89,7 @@ jobs:
                   let rolloutStatus = "${{ steps.deployment-status.outcome }}"
                   let serviceEndpointStatus = "${{steps.frontend-service.outcome }}"
                   let smokeTestStatus = "${{ steps.smoke-test.outcome }}"
-                  let uiArtifactUrl = "${{ steps.artifact-upload.outcome }}" === 'success' ? "${{ steps.artifact-upload.artifact-url }}" : 'NO_URL'
+                  let uiArtifactUrl = "${{ steps.artifact-upload.outcome }}" === 'success' ? "${{ steps.artifact-upload.outputs.artifact-url }}" : 'NO_URL'
 
                   let overallStatus = (rolloutStatus === 'success' && smokeTestStatus === 'success') ? '✅ PASSED' : '❌ FAILED'
                   const successEmoji = '✅'
