@@ -48,7 +48,6 @@ jobs:
               run: | 
                  SERVICE_URL=$(minikube service frontend-service --namespace=prod --url)
                  echo "SERVICE_URL=$SERVICE_URL" >> $GITHUB_ENV
-                 exit 1
             
             - name: Set up Python
               uses: actions/setup-python@v6
@@ -74,6 +73,7 @@ jobs:
                   page.screenshot(path="ui.png", full_page=True)
                   browser.close()
                 EOF
+                exit 1
 
             - name: Archive UI Page
               uses: actions/upload-artifact@v7
@@ -83,32 +83,20 @@ jobs:
                 archive: false
             
             - name: Summarize Deployment
-              run: |
-                echo "# Deployment Summary: ✅ PASSED" >> $GITHUB_STEP_SUMMARY
-                echo "" >> $GITHUB_STEP_SUMMARY
-                echo "Frontend Service was exposed on: $SERVICE_URL" >> $GITHUB_STEP_SUMMARY
-                echo "" >> $GITHUB_STEP_SUMMARY
-                echo "Checks" >> $GITHUB_STEP_SUMMARY
-                echo "" >> $GITHUB_STEP_SUMMARY
-                echo "✔ Kubernetes rollout completed" >> $GITHUB_STEP_SUMMARY
-                echo "" >> $GITHUB_STEP_SUMMARY
-                echo "✔ Service endpoint exposed" >> $GITHUB_STEP_SUMMARY
-                echo "" >> $GITHUB_STEP_SUMMARY
-                echo "✔ UI rendered successfully (Playwright)" >> $GITHUB_STEP_SUMMARY
-                echo "" >> $GITHUB_STEP_SUMMARY
-                echo "UI Screenshot Artifact ${{ steps.artifact-upload.outputs.artifact-url }}" >> $GITHUB_STEP_SUMMARY
-            
-            - name: Summarize Failed Deployment
-              if: ${{ failure() }}
-              run: |
-                echo "# Deployment Summary: ❌ FAILED" >> $GITHUB_STEP_SUMMARY
-                echo "" >> $GITHUB_STEP_SUMMARY
-                echo "Checks" >> $GITHUB_STEP_SUMMARY
-                echo "" >> $GITHUB_STEP_SUMMARY
-                echo "${{steps.deployment-status.outcome }} Kubernetes rollout completed" >> $GITHUB_STEP_SUMMARY
-                echo "" >> $GITHUB_STEP_SUMMARY
-                echo "${{steps.frontend-service.outcome}} Service endpoint exposed" >> $GITHUB_STEP_SUMMARY
-                echo "" >> $GITHUB_STEP_SUMMARY
-                echo "${{steps.smoke-test.outcome }} UI rendered successfully (Playwright)" >> $GITHUB_STEP_SUMMARY
-                echo "" >> $GITHUB_STEP_SUMMARY
-                echo "Help tips: Check previous steps related to deployments and pod health" >> $GITHUB_STEP_SUMMARY
+              if: ${{ !cancelled() }}
+              uses: actions/github-script@v8
+              with:
+                script: |
+                  let rolloutStatus = ${{ steps.deployment-status.outcome }}
+                  let serviceEndpointStatus = ${{steps.frontend-service.outcome }}
+                  let smokeTestStatus = ${{ steps.smoke-test.outcome }}
+                  let uiArtifactUrl = ${{ steps.artifact-upload.outcome == 'success' && steps.artifact-upload.artifact-url || 'NO URL'}}
+
+                  let overallStatus = (rolloutStatus === 'success' && smokeTestStatus === 'success') ? '✅ PASSED' : '❌ FAILED'
+                  
+                  await core.summary.addHeading(`Deployment Status: ${overallStatus}`)
+                  .addRaw(`Rollout Status Check: ${rolloutStatus}`)
+                  .addRaw(`Service Endpoint Check: ${serviceEndpointStatus}`)
+                  .addRaw(`Smoke Tests Status Check: ${smokeTestStatus}`)
+                  .addLink('UI Screenshot Artifact URL:', `${uiArtifactUrl}`)
+                  .write()
