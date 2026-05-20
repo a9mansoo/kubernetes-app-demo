@@ -73,7 +73,26 @@ jobs:
 
             - name: Archive UI Page
               uses: actions/upload-artifact@v7
+              id: artifact-upload
               with:
                 path: ui.png
                 archive: false
-              
+            
+            - name: Summarize Deployment
+              run: |
+                echo "# Deployment Summary" >> $GITHUB_STEP_SUMMARY
+                echo "" >> $GITHUB_STEP_SUMMARY
+                echo "✅ PASSED" >> $GITHUB_STEP_SUMMARY
+                echo "" >> $GITHUB_STEP_SUMMARY
+                echo "Frontend Service was exposed on: $SERVICE_URL" >> $GITHUB_STEP_SUMMARY
+                echo "" >> $GITHUB_STEP_SUMMARY
+                echo "UI Screenshot Artifact ${{ steps.artifact-upload.outputs.artifact-url }}" >> $GITHUB_STEP_SUMMARY
+            
+            - name: Summarize Failed Deployment
+              if: ${{ failure() }}
+              run: |
+                echo "# Deployment Summary" >> $GITHUB_STEP_SUMMARY
+                echo "" >> $GITHUB_STEP_SUMMARY
+                echo "❌ FAILED" >> $GITHUB_STEP_SUMMARY
+                echo "" >> $GITHUB_STEP_SUMMARY
+                echo "Help tips: Check previous steps related to deployments and pod health" >> $GITHUB_STEP_SUMMARY
