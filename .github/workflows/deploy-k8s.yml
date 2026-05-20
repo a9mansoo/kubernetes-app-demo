@@ -36,8 +36,8 @@ jobs:
             
             - name: Wait for Deployments to be ready
               run: |
-                 kubectl rollout status deploy/backend
-                 kubectl rollout status deploy/frontend
+                 kubectl rollout status deploy/backend --namespace=prod
+                 kubectl rollout status deploy/frontend --namespace=prod
 
             - name: Print Deployment health
               run: |
