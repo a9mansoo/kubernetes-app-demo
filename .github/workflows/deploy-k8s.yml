@@ -45,12 +45,35 @@ jobs:
             - name: Start Frontend Service
               run: | 
                  SERVICE_URL=$(minikube service frontend-service --namespace=prod --url)
-                 curl $SERVICE_URL > ui_page.html
-                 cat ui_page.html
+                 echo $SERIVCE_URL > $GITHUB_ENV
             
+            - name: Set up Python
+              uses: actions/setup-python@v6
+              with:
+                python-version: '3.10'
+            
+            - name: Install Playwright
+              run: |
+                pip install playwright
+                playwright install
+            
+            - name: Retrieve UI Screenshot
+              run: |
+                python - <<EOF
+                  from playwright.sync_api import sync_playwright
+                  import os
+                  url = os.environ["SERVICE_URL"]
+                  with sync_playwright() as p:
+                    browser = p.chromium.launch()
+                    page = browser.new_page()
+                    page.goto(url, wait_until="networkidle")
+                    page.screenshot(path="ui.png", full_page=True)
+                    browser.close()
+                EOF
+
             - name: Archive UI Page
               uses: actions/upload-artifact@v7
               with:
-                path: ui_page.html
+                path: ui.png
                 archive: false
               
