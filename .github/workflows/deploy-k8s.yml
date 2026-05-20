@@ -36,8 +36,8 @@ jobs:
             
             - name: Print pod health
               run: |
-                kubectl get deploy
+                kubectl get deploy -n prod
             
             - name: Start Frontend Service
               run: | 
-                 minikube service frontend-service --namespace --url
+                 minikube service frontend-service --namespace=prod --url
