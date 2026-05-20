@@ -1,0 +1,36 @@
+name: Deploy Application
+
+
+on:
+    workflow_dispatch:
+
+
+jobs:
+    setup_and_run_app:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout k8s
+              uses: actions/checkout@v4
+            
+            - name: Setup Minikube
+              uses: medyagh/setup-minikube@v0.0.20
+              with:
+                minikube-version: '1.36.0'
+            
+            - name: Setup Cluster Environment
+              working-directory: "k8s/environments"
+              run: |
+                kubectl apply -f prod/prod_namespace.yml
+            
+            - name: Build Resources with Kustomize
+              working-directory: "k8s/environments"
+              run: |
+                 kubectl apply -k prod
+            
+            - name: Print pod health
+              run: |
+                kubectl get deploy
+            
+            - name: Start Frontend Service
+              run: | 
+                 minikube service frontend-service --namespace --url
