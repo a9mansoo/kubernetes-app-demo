@@ -45,7 +45,7 @@ jobs:
             - name: Start Frontend Service
               run: | 
                  SERVICE_URL=$(minikube service frontend-service --namespace=prod --url)
-                 echo $SERIVCE_URL > $GITHUB_ENV
+                 echo "SERVICE_URL=$SERVICE_URL" >> $GITHUB_ENV
             
             - name: Set up Python
               uses: actions/setup-python@v6
