@@ -34,7 +34,12 @@ jobs:
               run: |
                  kubectl apply -k prod
             
-            - name: Print pod health
+            - name: Wait for Deployments to be ready
+              run: |
+                 kubectl wait --for=condition=Ready deploy/backend --timeout=60
+                 kubectl wait --for=condition=Ready deploy/frontend --timeout=60
+
+            - name: Print Deployment health
               run: |
                 kubectl get deploy -n prod
             
