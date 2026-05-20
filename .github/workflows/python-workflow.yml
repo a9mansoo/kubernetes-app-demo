@@ -4,8 +4,6 @@ on:
     push:
         branches:
             - master
-        # paths:
-        #   - backend/*
 
     pull_request:
         types: [opened, reopened, synchronize]
@@ -16,7 +14,7 @@ on:
 
 jobs:
     format:
-        runs-on: "ubuntu-latest"
+        runs-on: ubuntu-latest
         steps:
             - name: Checkout backend
               uses: actions/checkout@v6
