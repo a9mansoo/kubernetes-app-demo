@@ -94,10 +94,15 @@ jobs:
 
                   let overallStatus = (rolloutStatus === 'success' && smokeTestStatus === 'success') ? '✅ PASSED' : '❌ FAILED'
                   
-                  let summary =core.summary.addHeading(`Deployment Status: ${overallStatus}`)
-                  .addRaw(`Rollout Status Check: ${rolloutStatus}`)
-                  .addRaw(`Service Endpoint Check: ${serviceEndpointStatus}`)
-                  .addRaw(`Smoke Tests Status Check: ${smokeTestStatus}`)
+                  let summary = core.summary.addHeading(`Deployment Status: ${overallStatus}`).addBreak()
+                  .addRaw(`Rollout Status: ${rolloutStatus}`).addBreak()
+                  .addRaw(`Service Status: ${serviceEndpointStatus}`).addBreak()
+                  .addRaw(`Smoke Test: ${smokeTestStatus}`).addBreak()
 
-                  uiArtifactUrl === 'NO_URL' ? summary.addRaw(`UI Screenshot Artifact URL: ${uiArtifactUrl}`) : summary.addLink('UI Screenshot Artifact URL:', `${uiArtifactUrl}`)
-                  summary.write()
+                  if (uiArtifactUrl !== "NO_URL") {
+                  summary.addLink("UI Screenshot", uiArtifactUrl)
+                  } else {
+                   summary.addRaw("UI Screenshot: NOT AVAILABLE")
+                   }
+                  
+                   await summary.write()
