@@ -73,6 +73,7 @@ jobs:
                   page.screenshot(path="ui.png", full_page=True)
                   browser.close()
                 EOF
+                exit 1
 
             - name: Archive UI Page
               uses: actions/upload-artifact@v7
@@ -94,16 +95,29 @@ jobs:
                   let overallStatus = (rolloutStatus === 'success' && smokeTestStatus === 'success') ? '✅ PASSED' : '❌ FAILED'
                   const successEmoji = '✅'
                   const failureEmoji = '❌'
+                  const tableData = [
+                  [{ data: 'Validation Check', header: true },
+                   { data: 'Result', header: true }],
+                  [
+                    { data: 'Kubernetes Rollout' },
+                    { data: `${rolloutStatus === 'success' ? successEmoji : failureEmoji} ${rolloutStatus}` }
+                  ],
+                  [
+                    { data: 'Service Endpoint' },
+                    { data: `${serviceEndpointStatus === 'success' ? successEmoji : failureEmoji} ${serviceEndpointStatus}` }
+                  ],
+                  [
+                    { data: 'Smoke Test' },
+                    { data: `${smokeTestStatus === 'success' ? successEmoji : failureEmoji} ${smokeTestStatus}` }
+                  ]]
+                  
                   let summary = core.summary.addHeading(`🚀 Deployment Status: ${overallStatus}`).addBreak()
                   .addRaw(`Generated: ${new Date().toISOString()}`)
                   .addBreak()
                   .addBreak()
-                  .addRaw(`| Validation Check | Result |
-                  |---|---|
-                  | Kubernetes Rollout | ${rolloutStatus === 'success' ? successEmoji : failureEmoji} ${rolloutStatus} |
-                  | Service Endpoint | ${serviceEndpointStatus === 'success' ? successEmoji : failureEmoji} ${serviceEndpointStatus} |
-                  | Smoke Test | ${smokeTestStatus === 'success' ? successEmoji : failureEmoji} ${smokeTestStatus} |`).addBreak()
+                  .addTable(tableData).addBreak()
 
+                  summary.addHeading("📦 Artifacts", 2)
                   if (uiArtifactUrl !== "NO_URL") {
                   summary.addLink("UI Screenshot", uiArtifactUrl)
                   } else {
