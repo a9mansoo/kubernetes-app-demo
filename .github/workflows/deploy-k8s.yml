@@ -1,4 +1,4 @@
-name: Deploy Application
+name: Deploy Application As Minikube Demo
 
 
 on:
@@ -7,7 +7,6 @@ on:
         environment:
           type: choice
           options:
-            - development
             - production
 
 
@@ -45,4 +44,12 @@ jobs:
             
             - name: Start Frontend Service
               run: | 
-                 minikube service frontend-service --namespace=prod --url
+                 SERVICE_URL=$(minikube service frontend-service --namespace=prod --url)
+                 curl $SERVICE_URL > ui_page.html
+            
+            - name: Archive UI Page
+              uses: actions/upload-artifact@v6
+              with:
+                path: ui_page.html
+                archive: false
+              
