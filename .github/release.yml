@@ -16,3 +16,6 @@ changelog:
     - title: Other Changes
       labels:
         - "*"
+    - title: Bug Fix 🐛
+      labels:
+        - bug
