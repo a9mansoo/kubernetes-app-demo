@@ -34,18 +34,21 @@ jobs:
                  kubectl apply -k prod
             
             - name: Wait for Deployments to be ready
+              id: deployment-status
               run: |
-                 kubectl rollout status deploy/backend --namespace=prod
-                 kubectl rollout status deploy/frontend --namespace=prod
+                 kubectl rollout status deploy/backend --namespace=prod --timeout=60s
+                 kubectl rollout status deploy/frontend --namespace=prod --timeout=60s
 
             - name: Print Deployment health
               run: |
                 kubectl get deploy -n prod
             
             - name: Start Frontend Service
+              id: frontend-service
               run: | 
                  SERVICE_URL=$(minikube service frontend-service --namespace=prod --url)
                  echo "SERVICE_URL=$SERVICE_URL" >> $GITHUB_ENV
+                 exit 1
             
             - name: Set up Python
               uses: actions/setup-python@v6
@@ -58,6 +61,7 @@ jobs:
                 playwright install
             
             - name: Retrieve UI Screenshot
+              id: smoke-test
               run: |
                 python - <<EOF
                 from playwright.sync_api import sync_playwright
@@ -80,19 +84,31 @@ jobs:
             
             - name: Summarize Deployment
               run: |
-                echo "# Deployment Summary" >> $GITHUB_STEP_SUMMARY
-                echo "" >> $GITHUB_STEP_SUMMARY
-                echo "✅ PASSED" >> $GITHUB_STEP_SUMMARY
+                echo "# Deployment Summary: ✅ PASSED" >> $GITHUB_STEP_SUMMARY
                 echo "" >> $GITHUB_STEP_SUMMARY
                 echo "Frontend Service was exposed on: $SERVICE_URL" >> $GITHUB_STEP_SUMMARY
+                echo "" >> $GITHUB_STEP_SUMMARY
+                echo "Checks" >> $GITHUB_STEP_SUMMARY
+                echo "" >> $GITHUB_STEP_SUMMARY
+                echo "✔ Kubernetes rollout completed" >> $GITHUB_STEP_SUMMARY
+                echo "" >> $GITHUB_STEP_SUMMARY
+                echo "✔ Service endpoint exposed" >> $GITHUB_STEP_SUMMARY
+                echo "" >> $GITHUB_STEP_SUMMARY
+                echo "✔ UI rendered successfully (Playwright)" >> $GITHUB_STEP_SUMMARY
                 echo "" >> $GITHUB_STEP_SUMMARY
                 echo "UI Screenshot Artifact ${{ steps.artifact-upload.outputs.artifact-url }}" >> $GITHUB_STEP_SUMMARY
             
             - name: Summarize Failed Deployment
               if: ${{ failure() }}
               run: |
-                echo "# Deployment Summary" >> $GITHUB_STEP_SUMMARY
+                echo "# Deployment Summary: ❌ FAILED" >> $GITHUB_STEP_SUMMARY
                 echo "" >> $GITHUB_STEP_SUMMARY
-                echo "❌ FAILED" >> $GITHUB_STEP_SUMMARY
+                echo "Checks" >> $GITHUB_STEP_SUMMARY
+                echo "" >> $GITHUB_STEP_SUMMARY
+                echo "${{steps.deployment-status.outcome }} Kubernetes rollout completed" >> $GITHUB_STEP_SUMMARY
+                echo "" >> $GITHUB_STEP_SUMMARY
+                echo "${{steps.frontend-service.outcome}} Service endpoint exposed" >> $GITHUB_STEP_SUMMARY
+                echo "" >> $GITHUB_STEP_SUMMARY
+                echo "${{steps.smoke-test.outcome }} UI rendered successfully (Playwright)" >> $GITHUB_STEP_SUMMARY
                 echo "" >> $GITHUB_STEP_SUMMARY
                 echo "Help tips: Check previous steps related to deployments and pod health" >> $GITHUB_STEP_SUMMARY
