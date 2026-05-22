@@ -203,10 +203,6 @@ This workflow demonstrates production-grade deployment validation:
 
 ### What Makes This Different
 
-Most demos stop at:
-
-> “kubectl apply works”
-
 This pipeline proves:
 
 * pods actually become healthy
