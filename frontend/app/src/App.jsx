@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react';
 import API_URL from './api';
-import Img from './assets/image.png'
-import AvatarPic from "./assets/avatar.png"
+import Img from './assets/image.png';
+import AvatarPic from './assets/avatar.png';
 import {
   Stack,
   Typography,
@@ -10,74 +10,75 @@ import {
   CardHeader,
   CardMedia,
   CardContent,
-  IconButton
-} from "@mui/material"
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder"
-import ChatBubbleOutlineOutlinedIcon from '@mui/icons-material/ChatBubbleOutlineOutlined'
-import SendIcon from "@mui/icons-material/Send"
+  IconButton,
+} from '@mui/material';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import ChatBubbleOutlineOutlinedIcon from '@mui/icons-material/ChatBubbleOutlineOutlined';
+import SendIcon from '@mui/icons-material/Send';
 import Skeleton from '@mui/material/Skeleton';
+
+async function loadUser() {
+  let resp_json = null;
+  try {
+    let response = await fetch(`${API_URL}/user/1`);
+    resp_json = await response.json();
+    if (!response.ok) {
+      throw new Error('Could not fetch user data');
+    }
+  } catch (err) {
+    console.log(err);
+  }
+  return { user: resp_json?.user, img: AvatarPic };
+}
 
 function App() {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
+    const fetchData = async () => {
+      const userData = await loadUser();
+      setUser(userData);
+    };
 
-    const loadUser = async () => {
-    try {
-      let response = (await fetch(`${API_URL}/user/1`));
-      let resp_json = await response.json();
-      if (resp_json?.user) {
-        setUser({user: resp_json.user, img: AvatarPic});
-      }
-    } catch(err) {
-      console.log(err);
-    }
-  }
-
-  loadUser();
-
-  }, [])
-
+    fetchData();
+  }, []);
 
   return (
-     <Stack
+    <Stack
       sx={{
-        minHeight: "100vh",
-        backgroundColor: "#fafafa",
-        alignItems: "center",
-        paddingTop: 4
+        minHeight: '100vh',
+        backgroundColor: '#fafafa',
+        alignItems: 'center',
+        paddingTop: 4,
       }}
     >
       <Card
         sx={{
           width: 500,
-          borderRadius: 3
+          borderRadius: 3,
         }}
       >
         <CardHeader
-          avatar={
-            <Avatar src={user?.img ?? ""}>
-            </Avatar>
-          }
-          title={user?.user || "loading..."}
-          subheader={user? "k8s cluster" : "loading..."}
+          avatar={<Avatar src={user?.img ?? ''}></Avatar>}
+          title={user?.user || 'loading...'}
+          subheader={user ? 'k8s cluster' : 'loading...'}
         />
 
-        { user? <CardMedia
-          component="img"
-          image={Img}
-          alt="test-img"
-        /> : <Skeleton variant="rectangular" height={300}/>}
-        
+        {user ? (
+          <CardMedia component="img" image={Img} alt="test-img" />
+        ) : (
+          <Skeleton variant="rectangular" height={300} />
+        )}
+
         <Stack
           direction="row"
           spacing={1}
           sx={{
-            padding: 1
+            padding: 1,
           }}
         >
           <IconButton>
-            <FavoriteBorderIcon/>
+            <FavoriteBorderIcon />
           </IconButton>
 
           <IconButton>
@@ -91,12 +92,13 @@ function App() {
 
         <CardContent>
           <Typography variant="body2">
-            <strong>{user?.user}</strong> {user? "Getting these k8s working" : "Oh no! k8s is not working"}
+            <strong>{user?.user}</strong>{' '}
+            {user ? 'Getting these k8s working' : 'Oh no! k8s is not working'}
           </Typography>
         </CardContent>
       </Card>
     </Stack>
-  )
+  );
 }
 
-export default App
+export default App;
