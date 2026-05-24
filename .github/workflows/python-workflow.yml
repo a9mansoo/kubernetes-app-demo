@@ -98,10 +98,3 @@ jobs:
               working-directory: backend
               run: |
                  uv run pytest --cov-report xml:coverage.xml
-            
-            - name: Report Coverage
-              if: ${{ github.event_name == 'pull_request' }}
-              uses: orgoro/coverage@v3.2
-              with:
-                coverageFile: coverage.xml
-                token: ${{ secrets.GITHUB_TOKEN }}
