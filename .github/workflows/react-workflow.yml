@@ -10,6 +10,10 @@ on:
         paths:
             - frontend/**
 
+concurrency:
+  group: react-workflow-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
     quality_gate:
         runs-on: ubuntu-latest

@@ -10,7 +10,12 @@ on:
         branches:
             - master
         paths:
-          - backend/*
+          - backend/**
+
+
+concurrency:
+  group: python-workflow-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
     format:
@@ -98,3 +103,9 @@ jobs:
               working-directory: backend
               run: |
                  uv run pytest --cov-report xml:coverage.xml
+            
+            - name: Coverage comment
+              uses: MishaKav/pytest-coverage-comment@v1
+              if: ${{ github.event_name == 'pull_request' }}
+              with:
+                pytest-xml-coverage-path: ./coverage.xml

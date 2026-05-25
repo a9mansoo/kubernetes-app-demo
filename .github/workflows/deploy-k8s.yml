@@ -9,6 +9,9 @@ on:
           options:
             - production
 
+concurrency:
+  group: deploy-k8s-${{ inputs.environment }}
+  cancel-in-progress: true
 
 jobs:
     setup_and_run_app:
