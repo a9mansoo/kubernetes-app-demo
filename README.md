@@ -13,6 +13,11 @@ https://github.com/a9mansoo/kubernetes-deployment/actions/workflows/build-projec
 )](
 https://github.com/a9mansoo/kubernetes-deployment/actions/workflows/build-project.yml
 )
+[![Deployment Stats](
+https://github.com/a9mansoo/kubernetes-deployment/actions/workflows/deploy-k8s.yml/badge.svg
+)](
+https://github.com/a9mansoo/kubernetes-deployment/actions/workflows/deploy-k8s.yml
+)
 
 ---
 
