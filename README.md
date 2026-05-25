@@ -89,9 +89,18 @@ The goal is not application complexity — it is to demonstrate **real-world del
 This project includes multiple GitHub Actions workflows:
 
 * reusable Docker build workflow
-* backend validation (lint, format, tests)
+* backend validation workflow
+  * formatting validation (`black`)
+  * linting (`ruff`)
+  * automated tests (`pytest`)
+  * Python code coverage reporting
+* frontend React validation workflow
+  * dependency installation
+  * frontend build validation
+  * linting and static analysis
 * build + publish pipelines
 * automated release generation
+* concurrency-controlled workflows to prevent stale CI executions
 
 ---
 
