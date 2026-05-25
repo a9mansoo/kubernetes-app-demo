@@ -102,10 +102,12 @@ jobs:
             - name: Run Tests
               working-directory: backend
               run: |
-                 uv run pytest --cov-report xml:coverage.xml
+                 uv run pytest --cov-report xml:coverage.xml --junitxml=pytest.xml
             
             - name: Coverage comment
               uses: MishaKav/pytest-coverage-comment@v1
               if: ${{ github.event_name == 'pull_request' }}
               with:
-                pytest-xml-coverage-path: ./coverage.xml
+                pytest-xml-coverage-path: coverage.xml
+                pytest-coverage-path: pytest-coverage.txt
+                github-token: ${{ secrets.GITHUB_TOKEN }}
